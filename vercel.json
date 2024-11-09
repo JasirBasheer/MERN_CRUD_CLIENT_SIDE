@@ -2,15 +2,27 @@
     "version": 1,
     "name": "Mern-crud-backend",
     "builds": [
-    {
-    "src": "app.ts",
-    "use": "@vercel/node"
-    }
+      {
+        "src": "/src/app.ts",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "index.html",
+        "use": "@vercel/static"
+      }
     ],
     "routes": [
-    {
-    "src": "/(.*)",
-    "dest": "/src/app.ts"
-    }
+      {
+        "src": "^/$",
+        "dest": "/index.html"
+      },
+      {
+        "src": "/api/(.*)",
+        "dest": "/src/app.ts"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/src/app.ts"
+      }
     ]
-    }
+  }
