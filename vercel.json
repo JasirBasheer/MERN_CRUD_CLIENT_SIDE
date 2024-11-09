@@ -1,5 +1,5 @@
 {
-    "version": 1,
+    "version": 2,
     "name": "Mern-crud-backend",
     "builds": [
       {
