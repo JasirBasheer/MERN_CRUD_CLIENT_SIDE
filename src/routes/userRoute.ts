@@ -7,6 +7,9 @@ import { editUser, getUserDetails } from '../controllers/user/userController';
 const router = express.Router();
 dotenv.config();
 
+router.get('/test',(req,res)=>{
+    res.json({message:"Welcome to Mern Crud api"})
+})
 router.get('/user-details',getUserDetails)
 router.patch('/edit-profile',editUser)
 
