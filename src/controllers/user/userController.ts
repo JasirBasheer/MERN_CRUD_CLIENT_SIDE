@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
-import User, { IUser } from '../../models/user';
+import User from '../../models/user';
 import Jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 dotenv.config()
 
@@ -20,12 +20,7 @@ export const getUserDetails = async (req: Request, res: Response): Promise<any> 
             }
         }
         const userId = (isVerified as JwtPayload).user_id;
-        console.log(userId)
-
         const user = await User.findOne({ _id: userId });
-        console.log('user')
-        console.log(user)
-
         return res.status(200).json({ user })
 
     } catch (error) {
@@ -39,18 +34,11 @@ export const getUserDetails = async (req: Request, res: Response): Promise<any> 
 export const editUser = async (req: Request, res: Response): Promise<any> => {
     try {
         const { id, firstName, lastName, email, image } = req.body
-        console.log("req", req.body);
-
 
         const isUserExists = await User.findOne({ email: email })
 
         if (isUserExists && id !== isUserExists?._id?.toString()) {
-            console.log('user Already exists');
-            console.log('user Already exists');
-
             return res.status(400).json({ error: 'User already exists' });
-             
-
         }
 
         let user = await User.findOne({ _id: id })
@@ -61,7 +49,6 @@ export const editUser = async (req: Request, res: Response): Promise<any> => {
 
         } else {
             return res.status(404).json({ message: "User not found" });
-
         }
 
     } catch (error) {

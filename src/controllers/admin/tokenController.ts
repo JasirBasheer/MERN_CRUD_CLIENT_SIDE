@@ -1,10 +1,7 @@
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
-import User from '../../models/user';
-import Jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken'
+import Jwt, { TokenExpiredError } from 'jsonwebtoken'
 dotenv.config()
-
-
 
 
 export const verifyToken = async (req: Request, res: Response): Promise<any> => {
@@ -13,25 +10,19 @@ export const verifyToken = async (req: Request, res: Response): Promise<any> => 
         console.log(req.headers['authorization']);
 
         const token = req.headers['authorization']?.split(' ')[1] as string
-        console.log("token")
-        console.log(token)
-
         if (!token) return res.sendStatus(400)
 
-            let isVerified;
-            try {
-                isVerified = Jwt.verify(token, process.env.JWT_ACEESS_SECRET as string)
-            } catch (err) {
-                if (err instanceof TokenExpiredError) {                 
-                    console.log('Token expired, please refresh');                    
-                    return res.status(402).json({ message: 'Token expired, please refresh' });
-                } else {
-                    return res.status(402).json({ message: 'Invalid token' });
-                }
+        try {
+            let isVerified = Jwt.verify(token, process.env.JWT_ACEESS_SECRET as string)
+        } catch (err) {
+            if (err instanceof TokenExpiredError) {
+                console.log('Token expired, please refresh');
+                return res.status(402).json({ message: 'Token expired, please refresh' });
+            } else {
+                return res.status(402).json({ message: 'Invalid token' });
             }
-
-   
-        return res.status(200).json({msg:'success'})
+        }
+        return res.status(200).json({ msg: 'success' })
 
     } catch (err) {
         console.log(err)
@@ -42,8 +33,6 @@ export const verifyToken = async (req: Request, res: Response): Promise<any> => 
 export const refreshToken = async (req: Request, res: Response): Promise<any> => {
     try {
         const { AdminRefreshToken } = req.cookies;
-        console.log(AdminRefreshToken);
-
 
         if (!AdminRefreshToken) return res.sendStatus(400)
 
